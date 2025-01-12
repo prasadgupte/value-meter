@@ -19,9 +19,10 @@ export default function Home() {
   const [isSettingsCollapsed, setIsSettingsCollapsed] = useState(true);
 
   useEffect(() => {
-    let timer: ReturnType<typeof setInterval>;
+    let timer: number | null = null;
+    //let timer: NodeJS.Timeout | null = null; // Initialize with null
     if (isRunning && !isPaused) {
-      timer = setInterval(() => {
+      timer = window.setInterval(() => {
         setElapsedTime((prevElapsedTime) => prevElapsedTime + 1);
         const elapsed = (elapsedTime + 1) / 3600; // Hours
         const meetingCost = attendees * hourlyRate * elapsed;
@@ -30,9 +31,15 @@ export default function Home() {
         setProductsToBeSold(newProductsToBeSold);
       }, 1000);
     } else if (!isRunning && startTime !== null) {
-      clearInterval(timer);
+      if (timer !== null) {
+        clearTimeout(timer);
+      }
     }
-    return () => clearInterval(timer);
+    return () => {
+      if (timer !== null) {
+        clearInterval(timer);
+      }
+    };
   }, [isRunning, isPaused, elapsedTime, attendees, hourlyRate, startTime]);
 
   useEffect(() => {
@@ -99,7 +106,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="md:container md:mx-auto min-h-screen p-4 bg-gray-100 items-center">
+      <div className="md:container md:mx-auto min-h-screen flex w-full flex-col p-4 bg-gray-100 items-center">
         <header className="w-full mb-4">
           <h1 className="bg-gradient-to-r from-primary to-error bg-clip-text text-transparent font-black text-4xl text-center">⏰ Value Meter</h1>
         </header>
@@ -110,7 +117,7 @@ export default function Home() {
               <label htmlFor="attendees" className="block text-sm font-medium text-gray-700">Attendees:</label>
               <input type="number" id="attendees" className="input mt-1 block w-full" value={attendees} onChange={(e) => setAttendees(Number(e.target.value))} />
               <input type="range" id="attendees" min="3" max="30" className="range range-error mt-1 block w-full" step="1" value={attendees} onChange={(e) => setAttendees(Number(e.target.value))}/>
-<div class="flex w-full justify-between px-2 text-xs">
+<div className="flex w-full justify-between px-2 text-xs">
   <span>|</span>
   <span>|</span>
   <span>|</span>
@@ -155,6 +162,7 @@ export default function Home() {
                 </div>
               </div>
             )}
+            <div className="divider"></div>
             <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row sm:px-6">
               <button className="btn btn-lg btn-primary mr-2" onClick={startTimer}>Start</button>
               <button className="btn btn-lg btn-secondary ml-2" onClick={stopTimer}>Reset</button>
@@ -166,9 +174,10 @@ export default function Home() {
                 <div className="stat">
                   <div className="stat-title">Time Elapsed</div>
                   <div className="stat-value">{formatTime(elapsedTime)}</div>
+                  
                 </div>
                 <div className="stat">
-                  <div className="stat-title">Meeting cost</div>
+                  <div className="stat-title">Cost incurred</div>
                   <div className="stat-value">{getCurrencySymbol(currency)} {formatCost(cost)}</div>
                 </div>
               </div>
@@ -176,7 +185,7 @@ export default function Home() {
               
               
                 <div className="stat bg-primary  text-primary-content strong inline-block">
-                  <div className="stat-title text-primary-content"><strong>Tonieboxes to be Sold</strong></div>
+                  <div className="stat-title text-primary-content"><strong>Tonieboxes needed to be sold to recover cost</strong></div>
                   <div className="stat-value">{productsToBeSold}</div>
                 </div>
             </div>
@@ -193,8 +202,9 @@ export default function Home() {
                   <div className="badge badge-secondary">NEW</div>
                 </h2>                
               </div>*/}
+              <div className="divider">xx</div>
             </div>  
-                           
+                                       
               <div className="bg-base-100 items-center">
                 <button className="btn btn-lg btn-primary mr-2" onClick={stopTimer}>End meeting</button>
                 <button className="btn btn-lg btn-secondary ml-2" onClick={pauseTimer}>{isPaused ? 'Resume' : 'Pause'}</button>
