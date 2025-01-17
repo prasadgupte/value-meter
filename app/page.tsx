@@ -13,9 +13,8 @@ export default function Home() {
   const [startTime, setStartTime] = useState<number | null>(null);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [currency, setCurrency] = useState('EUR');
-  const [flyoutKey, setFlyoutKey] = useState(0);
   const [productsToBeSold, setProductsToBeSold] = useState(0);
-  const [showToast, setShowToast] = useState(false);
+  //const [showToast, setShowToast] = useState(false);
   const [triggerFlyout, setTriggerFlyout] = useState(false);
   const [isSettingsCollapsed, setIsSettingsCollapsed] = useState(true);
   const [showAlert, setShowAlert] = useState(false);
@@ -49,11 +48,11 @@ export default function Home() {
 
   useEffect(() => {
     if (isRunning) {
-      setFlyoutKey((prevKey) => prevKey + 1); // Trigger flyout animation when productsToBeSold changes
+      //setFlyoutKey((prevKey) => prevKey + 1); // Trigger flyout animation when productsToBeSold changes
       //setShowToast(true);
       setTriggerFlyout(true);
       setTimeout(() => {
-        setShowToast(false);
+        //setShowToast(false);
         setTriggerFlyout(false);
       }, 2000); // Hide toast after 2 seconds
     }
@@ -72,12 +71,11 @@ export default function Home() {
     setLastProductsToBeSold(productsToBeSold);
     setProductsToBeSold(1);
     setShowAlert(true);
-    setFlyoutKey(0);
     };
   
     const resetTimer = () => {
       stopTimer();
-      setShowToast(false);
+      //setShowToast(false);
       setShowAlert(false);
   };
 
@@ -276,7 +274,7 @@ export default function Home() {
       <p>
         &copy; {new Date().getFullYear()}{" "}
         <a className="text-blue-500" href="https://prasadgupte.com">
-          Prasad Gupte
+          Prasad Gupte v1.17
         </a>
       </p>
     </footer>
