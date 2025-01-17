@@ -74,6 +74,12 @@ export default function Home() {
     setShowAlert(true);
     setFlyoutKey(0);
     };
+  
+    const resetTimer = () => {
+      stopTimer();
+      setShowToast(false);
+      setShowAlert(false);
+  };
 
   const pauseTimer = () => {
     setIsPaused(!isPaused);
@@ -224,7 +230,7 @@ export default function Home() {
           <button className="btn btn-primary flex-1" onClick={startTimer}>
             Start
           </button>
-          <button className="btn btn-secondary flex-1" onClick={stopTimer}>
+          <button className="btn btn-secondary flex-1" onClick={resetTimer}>
             Reset
           </button>
         </div>
