@@ -72,6 +72,7 @@ export default function Home() {
     setLastProductsToBeSold(productsToBeSold);
     setProductsToBeSold(1);
     setShowAlert(true);
+    setFlyoutKey(0);
     };
 
   const pauseTimer = () => {
@@ -121,142 +122,159 @@ export default function Home() {
 
   return (
     <>
-      <div className="md:container md:mx-auto min-h-screen flex w-full flex-col p-4 bg-gray-100 items-center">
-        <header className="w-full mt-4">
-          <h1 className="bg-gradient-to-r from-primary to-error bg-clip-text text-transparent font-black text-4xl text-center">⏰ Time is money 💰</h1>
-        </header>
-        {showAlert && (
-          <div className="alert alert-warning shadow-lg mt-4">
-            <div>
-              <span>🤑 We spent the <strong>margin from {lastProductsToBeSold} {productName}</strong> for the last meeting. You can do better! 💪</span>
-            </div>
-          </div>
-        )}
-        {!isRunning ? (
-          <div className="bg-white p-6 rounded-lg">
-            <div className="mt-4">
-              <label htmlFor="attendees" className="block text-sm font-medium text-gray-700">Attendees:</label>
-              <input type="number" id="attendees" className="input mt-1 block w-full" value={attendees} onChange={(e) => setAttendees(Number(e.target.value))} />
-              <input type="range" id="attendees" min="3" max="30" className="range range-error mt-1 block w-full" step="1" value={attendees} onChange={(e) => setAttendees(Number(e.target.value))}/>
-<div className="flex w-full justify-between px-2 text-xs">
-  <span>|</span>
-  <span>|</span>
-  <span>|</span>
-  <span>|</span>
-  <span>|</span>
-</div>
-
-
-            </div>
-
-            <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500" onClick={() => setIsSettingsCollapsed(!isSettingsCollapsed)}>⚙️ Settings</a>
-            {!isSettingsCollapsed && (
-              <div className="mb-4">
-                <div className="mb-4">
-                  <label htmlFor="company" className="block text-sm font-medium text-gray-700">Company:</label>
-                  <select id="company" className="input mt-1 block w-full">
-                    <option value="tonies GmbH">tonies GmbH</option>
-                  </select>
-                </div>
-                <div className="mb-4">
-                  <label htmlFor="currency" className="block text-sm font-medium text-gray-700">Currency:</label>
-                  <select id="currency" className="input mt-1 block w-full" value={currency} onChange={(e) => setCurrency(e.target.value)}>
-                    <option value="USD">USD</option>
-                    <option value="EUR">EUR</option>
-                    <option value="GBP">GBP</option>
-                    <option value="JPY">JPY</option>
-                    <option value="AUD">AUD</option>
-                    <option value="CAD">CAD</option>
-                    <option value="CHF">CHF</option>
-                    <option value="CNY">CNY</option>
-                    <option value="SEK">SEK</option>
-                    <option value="NZD">NZD</option>
-                  </select>
-                </div>
-                <div className="mb-4">
-                  <label htmlFor="annualSalary" className="block text-sm font-medium text-gray-700">Avg. Annual Salary ({getCurrencySymbol(currency)}):</label>
-                  <input type="number" id="annualSalary" className="input mt-1 block w-full" value={annualSalary} onChange={handleAnnualSalaryChange} />
-                </div>
-                <div className="mb-4">
-                  <label htmlFor="hourlyRate" className="block text-sm font-medium text-gray-700">Avg. Hourly Rate ({getCurrencySymbol(currency)}):</label>
-                  <input type="number" id="hourlyRate" className="input mt-1 block w-full" value={hourlyRate} onChange={(e) => setHourlyRate(Number(e.target.value))} />
-                </div>
-                <div className="mb-4">
-                  <label htmlFor="productPrice" className="block text-sm font-medium text-gray-700">Profit per Product ({getCurrencySymbol(currency)}):</label>
-                  <input type="number" id="productPrice" className="input mt-1 block w-full" value={productPrice} onChange={(e) => setProductPrice(Number(e.target.value))} />
-                </div>
-                <div className="mb-4">
-                  <label htmlFor="productName" className="block text-sm font-medium text-gray-700">Product Name (plural):</label>
-                  <input type="text" id="productName" className="input mt-1 block w-full" value={productName} onChange={(e) => setProductName(e.target.value)} />
-                </div>
-                <div className="mb-4">
-                  <label htmlFor="productImageUrl" className="block text-sm font-medium text-gray-700">Product Image URL (png, jpg, gif):</label>
-                  <input type="text" id="productImageUrl" className="input mt-1 block w-full" value={productImageUrl} onChange={(e) => setProductImageUrl(e.target.value)} />
-                </div>
-              </div>
-            )}
-            <div className="divider"></div>
-            <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row sm:px-6">
-              <button className="btn btn-lg btn-primary mr-2" onClick={startTimer}>Start</button>
-              <button className="btn btn-lg btn-secondary ml-2" onClick={stopTimer}>Reset</button>
-            </div>
-          </div>
-        ) : (
-          <div className="shadow-md w-full max-w-md mx-auto">
-            <div className="stats stats-vertical lg:stats-horizontal shadow flex">
-                <div className="stat">
-                  <div className="stat-title">Time Elapsed</div>
-                  <div className="stat-value">{formatTime(elapsedTime)}</div>
-                  
-                </div>
-                <div className="stat">
-                  <div className="stat-title">Cost incurred</div>
-                  <div className="stat-value">{getCurrencySymbol(currency)} {formatCost(cost)}</div>
-                </div>
-              </div>
-              <div className="stats stats-vertical lg:stats-horizontal shadow flex">
-              
-              
-                <div className="stat bg-primary  text-primary-content strong inline-block">
-                  <div className="stat-title text-primary-content"><strong>{productName} needed to be sold to recover cost</strong></div>
-                  <div className="stat-value">{productsToBeSold}</div>
-                </div>
-            </div>
-            <div key={flyoutKey} className={`card bg-base-10 shadow-xl flex items-center `}>
-              <figure>
-                <img
-                  className={`flex items-center ${!triggerFlyout ? 'animate-pulse' : 'animate-flyout'}`}
-                  src={productImageUrl}
-                  alt={productName} />
-              </figure>
-              {/*<div className="card-body">
-                <h2 className="card-title">
-                  Toniebox
-                  <div className="badge badge-secondary">NEW</div>
-                </h2>                
-              </div>*/}
-            </div>  
-                                       
-              <div className="bg-base-100 items-center">
-                <button className="btn btn-lg btn-primary mr-2" onClick={stopTimer}>End meeting</button>
-                <button className="btn btn-lg btn-secondary ml-2" onClick={pauseTimer}>{isPaused ? 'Resume' : 'Pause'}</button>
-              </div>
-
-          </div>
-        )}
-        {showToast && (
-          <div className="toast toast-top toast-center">
-            <div className="alert alert-info animate-fade-out">
-              <span>And another one</span>
-            </div>
-          </div>
-        )}
-        <footer className="w-full bg-base-200/60 items-center rounded-t-box px-6 py-4 shadow mt-auto">
-          <aside className="grid-flow-col items-center">
-            <p>&copy; {new Date().getFullYear()} <a className="link link-hover" href="https://prasadgupte.com">Prasad Gupte</a></p>
-          </aside>          
-        </footer>
+  <div className="container mx-auto min-h-screen flex flex-col p-4 bg-gray-100 items-center">
+    <header className="w-full mt-4">
+      <h1 className="bg-gradient-to-r from-primary to-error bg-clip-text text-transparent font-black text-3xl sm:text-4xl text-center">
+        ⏰ Time is money 💰
+      </h1>
+    </header>
+    {showAlert && (
+      <div className="alert alert-warning shadow-lg mt-4 w-full max-w-md">
+        <div>
+          <span>
+            🤑 We spent the <strong>margin from {lastProductsToBeSold} {productName}</strong> for the last meeting. You can do better! 💪
+          </span>
+        </div>
       </div>
-    </>
+    )}
+    {!isRunning ? (
+      <div className="bg-white p-6 rounded-lg w-full max-w-md">
+        <div className="mt-4">
+          <label htmlFor="attendees" className="block text-sm font-medium text-gray-700">
+            Attendees:
+          </label>
+          <input
+            type="number"
+            id="attendees"
+            className="input mt-1 block w-full"
+            value={attendees}
+            onChange={(e) => setAttendees(Number(e.target.value))}
+          />
+          <input
+            type="range"
+            id="attendees"
+            min="3"
+            max="30"
+            className="range range-error mt-1 block w-full"
+            step="1"
+            value={attendees}
+            onChange={(e) => setAttendees(Number(e.target.value))}
+          />
+          <div className="flex w-full justify-between px-2 text-xs text-gray-500">
+            {[...Array(5)].map((_, idx) => (
+              <span key={idx}>|</span>
+            ))}
+          </div>
+        </div>
+
+        <a
+          href="#"
+          className="text-sm font-medium text-indigo-600 hover:text-indigo-500 block mt-4"
+          onClick={() => setIsSettingsCollapsed(!isSettingsCollapsed)}
+        >
+          ⚙️ Settings
+        </a>
+        {!isSettingsCollapsed && (
+               <div className="mb-4">
+               <div className="mb-4">
+                 <label htmlFor="company" className="block text-sm font-medium text-gray-700">Company:</label>
+                 <select id="company" className="input mt-1 block w-full">
+                   <option value="tonies GmbH">tonies GmbH</option>
+                 </select>
+               </div>
+               <div className="mb-4">
+                 <label htmlFor="currency" className="block text-sm font-medium text-gray-700">Currency:</label>
+                 <select id="currency" className="input mt-1 block w-full" value={currency} onChange={(e) => setCurrency(e.target.value)}>
+                   <option value="USD">USD</option>
+                   <option value="EUR">EUR</option>
+                   <option value="GBP">GBP</option>
+                   <option value="JPY">JPY</option>
+                   <option value="AUD">AUD</option>
+                   <option value="CAD">CAD</option>
+                   <option value="CHF">CHF</option>
+                   <option value="CNY">CNY</option>
+                   <option value="SEK">SEK</option>
+                   <option value="NZD">NZD</option>
+                 </select>
+               </div>
+               <div className="mb-4">
+                 <label htmlFor="annualSalary" className="block text-sm font-medium text-gray-700">Avg. Annual Salary ({getCurrencySymbol(currency)}):</label>
+                 <input type="number" id="annualSalary" className="input mt-1 block w-full" value={annualSalary} onChange={handleAnnualSalaryChange} />
+               </div>
+               <div className="mb-4">
+                 <label htmlFor="hourlyRate" className="block text-sm font-medium text-gray-700">Avg. Hourly Rate ({getCurrencySymbol(currency)}):</label>
+                 <input type="number" id="hourlyRate" className="input mt-1 block w-full" value={hourlyRate} onChange={(e) => setHourlyRate(Number(e.target.value))} />
+               </div>
+               <div className="mb-4">
+                 <label htmlFor="productPrice" className="block text-sm font-medium text-gray-700">Profit per Product ({getCurrencySymbol(currency)}):</label>
+                 <input type="number" id="productPrice" className="input mt-1 block w-full" value={productPrice} onChange={(e) => setProductPrice(Number(e.target.value))} />
+               </div>
+               <div className="mb-4">
+                 <label htmlFor="productName" className="block text-sm font-medium text-gray-700">Product Name (plural):</label>
+                 <input type="text" id="productName" className="input mt-1 block w-full" value={productName} onChange={(e) => setProductName(e.target.value)} />
+               </div>
+               <div className="mb-4">
+                 <label htmlFor="productImageUrl" className="block text-sm font-medium text-gray-700">Product Image URL (png, jpg, gif):</label>
+                 <input type="text" id="productImageUrl" className="input mt-1 block w-full" value={productImageUrl} onChange={(e) => setProductImageUrl(e.target.value)} />
+               </div>
+             </div>
+        )}
+        <div className="divider my-4"></div>
+        <div className="flex justify-center gap-4">
+          <button className="btn btn-primary flex-1" onClick={startTimer}>
+            Start
+          </button>
+          <button className="btn btn-secondary flex-1" onClick={stopTimer}>
+            Reset
+          </button>
+        </div>
+      </div>
+    ) : (
+      <div className="shadow-md w-full max-w-md mx-auto space-y-4">
+        <div className="stats flex shadow p-4">
+          <div className="stat">
+            <div className="stat-title">Time Elapsed</div>
+            <div className="stat-value">{formatTime(elapsedTime)}</div>
+          </div>
+          <div className="stat">
+            <div className="stat-title">Cost incurred</div>
+            <div className="stat-value">
+              {getCurrencySymbol(currency)} {formatCost(cost)}
+            </div>
+          </div>
+        </div>
+        <div className="stats flex bg-primary text-primary-content shadow">
+          <div className="stat">
+            <div className="stat-title text-primary-content font-semibold">{productName} to Recover Cost</div>
+            <div className="stat-value">{productsToBeSold}</div>
+          </div>
+        </div>
+        <div className="flex justify-center">
+          <img
+            className={`w-48 h-48 object-cover rounded-md ${!triggerFlyout ? 'animate-pulse' : 'animate-flyout'}`}
+            src={productImageUrl}
+            alt={productName}
+          />
+        </div>
+        <div className="flex justify-center gap-4">
+          <button className="btn btn-primary flex-1" onClick={stopTimer}>
+            End Meeting
+          </button>
+          <button className="btn btn-secondary flex-1" onClick={pauseTimer}>
+            {isPaused ? "Resume" : "Pause"}
+          </button>
+        </div>
+      </div>
+    )}
+    <footer className="w-full bg-gray-50 py-4 text-center mt-6">
+      <p>
+        &copy; {new Date().getFullYear()}{" "}
+        <a className="text-blue-500" href="https://prasadgupte.com">
+          Prasad Gupte
+        </a>
+      </p>
+    </footer>
+  </div>
+</>
   );
 }
