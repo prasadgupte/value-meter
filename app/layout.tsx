@@ -14,10 +14,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const metadata: Metadata = {
+/*const metadata: Metadata = {
   title: "Value Timer",
   description: "An app to Measure meeting RoI by Prasad Gupte",
-};
+};*/
 
 export default function RootLayout({
   children,

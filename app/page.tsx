@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import type { HomeProps } from './types';
 
-export default function Home({ initialState }: { initialState: string }) {
+export default function Home({ initialState }: HomeProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -29,6 +30,13 @@ export default function Home({ initialState }: { initialState: string }) {
   useEffect(() => {
     //document.title = "Value Meter";
   }, []);
+
+  useEffect(() => {
+    if (!['new', 'running', 'paused', 'end'].includes(initialState)) {
+      //console.error('Invalid initial state:', initialState);
+      navigate('/meeting/new');
+    }
+  }, [initialState]);
   
   useEffect(() => {
     let timer: number | null = null;
@@ -140,7 +148,7 @@ export default function Home({ initialState }: { initialState: string }) {
   <div className="container mx-auto min-h-screen flex flex-col p-4 bg-gray-100 items-center">
     <header className="w-full mt-4">
       <h1 className="bg-gradient-to-r from-primary to-error bg-clip-text text-transparent font-black text-3xl sm:text-4xl text-center">
-        ⏰ Time is money 💰
+        ⏰ Time is money 💰 {initialState}
       </h1>
     </header>
     {showAlert && (
