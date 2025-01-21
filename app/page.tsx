@@ -1,8 +1,12 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-export default function Home() {
+export default function Home({ initialState }: { initialState: string }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [attendees, setAttendees] = useState(6);
   const [hourlyRate, setHourlyRate] = useState(45);
   const [annualSalary, setAnnualSalary] = useState(80000);    
@@ -22,6 +26,10 @@ export default function Home() {
   const [productName, setProductName] = useState('Tonieboxes');
   const [productImageUrl, setProductImageUrl] = useState('https://res.cloudinary.com/tonies/image/fetch/f_auto,q_60,c_fill,b_rgb:ffffff,w_1336,h_1002/https://278163f382d2bab4b036-4f5ec62496a160f3570d3b6e48fc4516.ssl.cf3.rackcdn.com/Toniebox_red_d-DrP5n54q.png');
 
+  useEffect(() => {
+    //document.title = "Value Meter";
+  }, []);
+  
   useEffect(() => {
     let timer: number | null = null;
     //let timer: NodeJS.Timeout | null = null; // Initialize with null
@@ -61,6 +69,7 @@ export default function Home() {
   const startTimer = () => {
     setIsRunning(true);
     setStartTime(Date.now());
+    navigate('/meeting/running');
   };
 
   const stopTimer = () => {
@@ -71,6 +80,7 @@ export default function Home() {
     setLastProductsToBeSold(productsToBeSold);
     setProductsToBeSold(1);
     setShowAlert(true);
+    navigate('/meeting/end');
     };
   
     const resetTimer = () => {
@@ -81,6 +91,7 @@ export default function Home() {
 
   const pauseTimer = () => {
     setIsPaused(!isPaused);
+    navigate(isPaused ? '/meeting/running' : '/meeting/paused');
   };
 
   const formatTime = (seconds: number) => {
@@ -180,12 +191,12 @@ export default function Home() {
         </a>
         {!isSettingsCollapsed && (
                <div className="mb-4">
-               <div className="mb-4">
+               {/*<div className="mb-4">
                  <label htmlFor="company" className="block text-sm font-medium text-gray-700">Company:</label>
                  <select id="company" className="input mt-1 block w-full">
                    <option value="tonies GmbH">tonies GmbH</option>
                  </select>
-               </div>
+               </div>*/}
                <div className="mb-4">
                  <label htmlFor="currency" className="block text-sm font-medium text-gray-700">Currency:</label>
                  <select id="currency" className="input mt-1 block w-full" value={currency} onChange={(e) => setCurrency(e.target.value)}>
